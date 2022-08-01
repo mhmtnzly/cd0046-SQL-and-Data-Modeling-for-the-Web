@@ -171,6 +171,7 @@ def show_venue(venue_id):
         'upcoming_shows': upcoming_shows,
         'past_shows': past_shows
     }
+    print(venue.genres[0])
 
     return render_template('pages/show_venue.html', venue=data)
 
@@ -196,13 +197,14 @@ def create_venue_submission():
                      state=form.state.data,
                      address=form.address.data,
                      phone=form.phone.data,
-                     genres=form.genres.data,
+                     genres=form.genres.data[0],
                      image_link=form.image_link.data,
                      facebook_link=form.facebook_link.data,
                      website_link=form.website_link.data,
                      seeking_talent=True if form.seeking_talent.data else False,
                      seeking_description=form.seeking_description.data)
         db.session.add(data)
+        
         db.session.commit()
     except:
         db.session.rollback()
@@ -227,7 +229,8 @@ def delete_venue(venue_id):
     # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
     error = False
     try:
-        Venue.query.filter(Venue.id == venue_id).delete(synchronize_session=False)
+        Venue.query.filter(Venue.id == venue_id).delete(
+            synchronize_session=False)
         db.session.commit()
     except:
         db.session.rollback()
@@ -349,7 +352,7 @@ def edit_artist_submission(artist_id):
                       Artist.city: form.city.data,
                       Artist.state: form.state.data,
                       Artist.phone: form.phone.data,
-                      Artist.genres: form.genres.data,
+                      Artist.genres: form.genres.data[0],
                       Artist.image_link: form.image_link.data,
                       Artist.facebook_link: form.facebook_link.data,
                       Artist.website_link: form.website_link.data,
@@ -393,7 +396,7 @@ def edit_venue_submission(venue_id):
                       Venue.state: form.state.data,
                       Venue.address: form.address.data,
                       Venue.phone: form.phone.data,
-                      Venue.genres: form.genres.data,
+                      Venue.genres: form.genres.data[0],
                       Venue.image_link: form.image_link.data,
                       Venue.facebook_link: form.facebook_link.data,
                       Venue.website_link: form.website_link.data,
@@ -435,7 +438,7 @@ def create_artist_submission():
                       city=form.city.data,
                       state=form.state.data,
                       phone=form.phone.data,
-                      genres=form.genres.data,
+                      genres=form.genres.data[0],
                       image_link=form.image_link.data,
                       facebook_link=form.facebook_link.data,
                       website_link=form.website_link.data,
